@@ -58,7 +58,12 @@ export default class Maps extends React.Component {
                     waypoints={this.props.waypoints}
                     strokeColor="blue"
                     strokeWidth={3}
-                    onReady={result=>{this.setState({duration:result.duration,distance:result.distance})}}
+                    onReady={result => {
+                        console.log(result);
+                        const duration = Math.ceil(result.duration);
+                        const distance = Math.round(result.distance * 100) / 100;
+                        this.setState({duration: duration, distance: distance})
+                    }}
                 />
                 <Marker coordinate={this.state.driverCoordinates} title={"Driver"}>
                     <Image style={{width: 30, height: 30}} source={require("./delievery.png")}/>
