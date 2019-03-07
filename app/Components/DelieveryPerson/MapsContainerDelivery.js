@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import Maps from "./Maps";
+import MapsDelivery from "./MapsDelivery";
 import {PermissionsAndroid} from 'react-native';
 
-export default class MapsContainer extends Component {
+export default class MapsContainerDelivery extends Component {
     constructor(props) {
         super(props);
-        const sourceCord = {
+        const userCoordinates = {
             latitude: 12.974963,
             longitude: 77.609139
         };
@@ -14,26 +14,26 @@ export default class MapsContainer extends Component {
             longitude: 77.637398
         };
         this.state = {
-            currentSourceCord: sourceCord,
+            currentSourceCord: userCoordinates,
             destCord: destCord,
             markers: [{
                 key: 1,
-                coordinates: sourceCord,
+                coordinates: userCoordinates,
                 title: "Source",
-                imagePath: require("./../assets/restaurant.png")
+                imagePath: require("./../../assets/restaurant.png")
             }, {
                 key: 2,
                 coordinates: destCord,
                 title: "Destination",
-                imagePath: require("./../assets/home.png")
+                imagePath: require("./../../assets/home.png")
             }],
             initialMap: {
-                latitude: sourceCord.latitude,
-                longitude: sourceCord.longitude,
+                latitude: userCoordinates.latitude,
+                longitude: userCoordinates.longitude,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
-            driverCoordinates: sourceCord,
+            driverCoordinates: userCoordinates,
             traveledPathCoordinates: []
         }
     }
@@ -46,7 +46,7 @@ export default class MapsContainer extends Component {
                 {},
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.intervalId=setInterval(this.updateDriverCoordinates,5000);
+                this.intervalId = setInterval(this.updateDriverCoordinates, 5000);
 
             } else {
                 console.log("Give location permission and  turn on gps");
@@ -56,12 +56,12 @@ export default class MapsContainer extends Component {
         }
     }
 
-    updateDriverCoordinates=()=>{
+    updateDriverCoordinates = () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                let coords={latitude:position.coords.latitude, longitude:position.coords.longitude};
+                let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
                 this.state.traveledPathCoordinates.push(coords);
-                this.setState({driverCoordinates:coords});
+                this.setState({driverCoordinates: coords});
             }, (error) => {
                 console.log(error)
             },
@@ -70,9 +70,9 @@ export default class MapsContainer extends Component {
 
     render() {
         return (
-            <Maps markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
-                  initalMap={this.state.initialMap}
-                  sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
+            <MapsDelivery markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
+                          initalMap={this.state.initialMap}
+                          sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
         )
     }
 
