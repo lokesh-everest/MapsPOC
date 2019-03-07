@@ -56,6 +56,9 @@ export default class Maps extends React.Component {
                     <Image style={{width: 30, height: 30}} source={require("./delievery.png")}/>
                 </Marker>
             </MapView>
+            <View style={styles.button}>
+                <Button title="End" onPress={()=>{this.props.onEndButtonPress}} color="black"/>
+            </View>
             <View style={styles.text}>
                 <Statistics duration={this.state.duration} distance={this.state.distance}/>
             </View>
@@ -74,5 +77,10 @@ const styles=StyleSheet.create({
     map:{
         flex:1,
         zIndex: -1
+    },
+    button:{
+        bottom:100,
+        left:Dimensions.get('window').width/2-90,
+        position:"absolute",
     }
 })
