@@ -5,12 +5,12 @@ export default class MapsContainer extends Component {
     constructor(props) {
         super(props);
         const sourceCord = {
-            latitude: 12.9703591,
-            longitude: 77.6352114
+            latitude: 12.974963,
+            longitude: 77.609139
         };
         const destCord = {
-            latitude: 12.9729726,
-            longitude: 77.6070906
+            latitude: 12.970400,
+            longitude: 77.637398
         };
         this.state = {
             sourceCord: sourceCord,
