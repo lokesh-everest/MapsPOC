@@ -18,11 +18,13 @@ export default class MapsContainer extends Component {
             markers: [{
                 key: 1,
                 coordinates: sourceCord,
-                title: "Source"
+                title: "Source",
+                imagePath: require("./restaurant.png")
             }, {
                 key: 2,
                 coordinates: destCord,
-                title: "Destination"
+                title: "Destination",
+                imagePath:require("./home.png")
             }],
             initialMap: {
                 latitude: sourceCord.latitude,
