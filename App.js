@@ -8,14 +8,14 @@
  */
 
 import React, {Component} from 'react';
-import MapsContainer from './app/Components/MapsContainer';
+import AppNavigator from "./app/Components/Navigator";
 
 
 type Props = {};
 export default class App extends Component<Props> {
     render() {
         return (
-            <MapsContainer/>
+            <AppNavigator/>
         );
     }
 }
