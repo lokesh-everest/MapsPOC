@@ -20,12 +20,12 @@ export default class MapsContainer extends Component {
                 key: 1,
                 coordinates: sourceCord,
                 title: "Source",
-                imagePath: require("./restaurant.png")
+                imagePath: require("./../assets/restaurant.png")
             }, {
                 key: 2,
                 coordinates: destCord,
                 title: "Destination",
-                imagePath: require("./home.png")
+                imagePath: require("./../assets/home.png")
             }],
             initialMap: {
                 latitude: sourceCord.latitude,
