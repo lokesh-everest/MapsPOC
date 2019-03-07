@@ -33,7 +33,8 @@ export default class MapsContainer extends Component {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
-            traveledPathCoordinates:[]
+            driverCoordinates: sourceCord,
+            traveledPathCoordinates: []
         }
     }
 
@@ -60,7 +61,7 @@ export default class MapsContainer extends Component {
             (position) => {
                 let coords={latitude:position.coords.latitude, longitude:position.coords.longitude};
                 this.state.traveledPathCoordinates.push(coords);
-                this.setState({currentSourceCord:coords});
+                this.setState({driverCoordinates:coords});
             }, (error) => {
                 console.log(error)
             },
@@ -69,8 +70,9 @@ export default class MapsContainer extends Component {
 
     render() {
         return (
-            <Maps markers={this.state.markers} initalMap={this.state.initialMap}
-                  sourceCordinates={this.state.currentSourceCord} destinationCordinates={this.state.destCord}/>
+            <Maps markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
+                  initalMap={this.state.initialMap}
+                  sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
         )
     }
 

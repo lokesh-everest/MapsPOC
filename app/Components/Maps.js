@@ -8,23 +8,31 @@ import Statistics from "./Statistics";
 export default class Maps extends React.Component {
     constructor(props) {
         super(props);
+        this.mapRef = null;
         this.state = {
             distance:0,
             duration:0,
-        }
-        this.mapRef = null;
+            sourceCoordinates: this.props.sourceCoordinates,
+            destinationCoordinates: this.props.destinationCoordinates,
+            driverCoordinates: this.props.sourceCoordinates,
+            initialMap: this.props.initialMap
+        };
         this.fitToMarkers = this.fitToMarkers.bind(this);
-        this.state = {
-            sourceCordinates: this.props.sourceCordinates,
-            destinationCordinates: this.props.destinationCordinates,
-            driverCordinates: this.props.sourceCordinates
-        }
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.updateDriverCoordinates(nextProps.driverCoordinates);
+    }
+
+    updateDriverCoordinates(updatedDriverCoordinates) {
+        this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
+            this.fitToMarkers()
+        });
+    }
     fitToMarkers() {
-        this.mapRef.fitToCoordinates([this.state.driverCordinates, this.state.destinationCordinates], {
-            edgePadding: {top: 10, right: 10, bottom: 10, left: 10},
-            animated: false
+        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            animated: true
         })
     }
     render() {
@@ -33,7 +41,7 @@ export default class Maps extends React.Component {
             <MapView
                 ref={(ref) => { this.mapRef = ref }}
                 style={{ flex: 1 }}
-                initialRegion={this.props.coordinates}
+                initialRegion={this.state.initialMap}
                 showsUserLocation={true}
                 onMapReady={this.fitToMarkers}>
                 {
@@ -44,15 +52,15 @@ export default class Maps extends React.Component {
                     ))
                 }
                 <MapViewDirections
-                    origin={this.props.sourceCordinates}
-                    destination={this.props.destinationCordinates}
+                    origin={this.state.driverCoordinates}
+                    destination={this.state.destinationCoordinates}
                     apikey={Config.GOOGLE_MAPS_API_KEY}
                     waypoints={this.props.waypoints}
                     strokeColor="blue"
                     strokeWidth={3}
                     onReady={result=>{this.setState({duration:result.duration,distance:result.distance})}}
                 />
-                <Marker coordinate={this.state.driverCordinates} title={"Driver"} pinColor={"yellow"}>
+                <Marker coordinate={this.state.driverCoordinates} title={"Driver"}>
                     <Image style={{width: 30, height: 30}} source={require("./delievery.png")}/>
                 </Marker>
             </MapView>
