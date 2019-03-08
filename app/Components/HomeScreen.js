@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Button, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native'
+import {View, Button, StyleSheet, Dimensions, TouchableOpacity, Text,Image} from 'react-native'
 
 export default class HomeScreen extends React.Component {
 
-    handleUserClick=()=>{
+    handleUserClick =()=>{
         this.props.navigation.navigate('MapsContainerUser')
     }
     handleDeliveryClick=()=>{
@@ -21,20 +21,28 @@ export default class HomeScreen extends React.Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <TouchableOpacity style={styles.button}
-                                      onPress={this.handleUserClick}><Text style={{color: 'white'}}>User</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.button}
-                                      onPress={this.handleDeliveryClick}><Text style={{color: 'white'}}>Driver</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={this.handleUserClick}>
+                        <Image style={{width:50,height:50}} source={require('./../assets/home.png')} />
+                            <Text style={{color: 'black'}}>User</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}  onPress={this.handleDeliveryClick}>
+                        <Image style={{width:50,height:50}} source={require('./../assets/delievery.png')} />
+                            <Text style={{color: 'black'}}>Delivery Person</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    button: {
-        color: 'red',
-        backgroundColor:'#04528a',
-        padding: 20,
+    button: {width: 150,
+        height: 150,
+        borderRadius: 75,
+        borderWidth: 1,
+        borderColor: 'red',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: "center",
         marginRight: 20
     }
 })
