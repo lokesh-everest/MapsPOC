@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, StyleSheet, Dimensions} from 'react-native';
+import {View, Image, StyleSheet, Dimensions,Text} from 'react-native';
 import MapView, {Marker} from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 import Config from 'react-native-config';
@@ -40,6 +40,7 @@ export default class MapsDelivery extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
+                <Text>Delivery Person</Text>
                 <MapView
                     ref={(ref) => {
                         this.mapRef = ref

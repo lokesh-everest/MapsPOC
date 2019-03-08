@@ -11,20 +11,30 @@ export default class HomeScreen extends React.Component {
     }
     render() {
         return (
-            <View>
-                <TouchableOpacity style={styles.button}
-                                  onPress={this.handleUserClick}><Text>User</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.button}
-                                  onPress={this.handleDeliveryClick}><Text>Driver</Text></TouchableOpacity>
+            <View style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity style={styles.button}
+                                      onPress={this.handleUserClick}><Text style={{color: 'white'}}>User</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.button}
+                                      onPress={this.handleDeliveryClick}><Text style={{color: 'white'}}>Driver</Text></TouchableOpacity>
+                </View>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
     button: {
-        color: '#ffffff',
-        backgroundColor:'#1E6738',
-        paddingTop:10,
-        paddingBottom:10,
+        color: 'red',
+        backgroundColor:'#04528a',
+        padding: 20,
+        marginRight: 20
     }
 })
