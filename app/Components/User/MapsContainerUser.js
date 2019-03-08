@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import MapsUser from "./MapsUser";
+import SocketIOClient from 'socket.io-client';
 
 export default class MapsContainerUser extends Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class MapsContainerUser extends Component {
             latitude: 12.970400,
             longitude: 77.637398
         };
+        this.socket = SocketIOClient('http://13.233.90.8:3000');
         this.state = {
             currentSourceCord: sourceCord,
             destCord: destCord,
@@ -37,9 +39,11 @@ export default class MapsContainerUser extends Component {
         }
     }
 
-    getDelieveryPersonCoordinates = () => {
-
-    };
+    componentDidMount() {
+        this.socket.on('customerEvent', (message) => {
+            this.setState({driverCoordinates:message});
+        });
+    }
 
     render() {
         return (

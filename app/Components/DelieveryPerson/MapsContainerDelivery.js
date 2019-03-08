@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import MapsDelivery from "./MapsDelivery";
 import {PermissionsAndroid} from 'react-native';
+import SocketIOClient from 'socket.io-client';
 
 export default class MapsContainerDelivery extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ export default class MapsContainerDelivery extends Component {
             latitude: 12.970400,
             longitude: 77.637398
         };
+        this.socket = SocketIOClient('http://13.233.90.8:3000');
         this.state = {
             currentSourceCord: userCoordinates,
             destCord: destCord,
@@ -40,13 +42,14 @@ export default class MapsContainerDelivery extends Component {
 
 
     async componentDidMount() {
+
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 {},
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.intervalId = setInterval(this.updateDriverCoordinates, 5000);
+                this.intervalId = setInterval(this.updateDriverCoordinates, 1000);
 
             } else {
                 console.log("Give location permission and  turn on gps");
@@ -60,6 +63,7 @@ export default class MapsContainerDelivery extends Component {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                this.socket.emit('driverEvent', coords);
                 this.state.traveledPathCoordinates.push(coords);
                 this.setState({driverCoordinates: coords});
             }, (error) => {
