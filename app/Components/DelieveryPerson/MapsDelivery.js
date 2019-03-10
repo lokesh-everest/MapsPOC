@@ -25,9 +25,16 @@ export default class MapsDelivery extends React.Component {
     }
 
     updateDriverCoordinates(updatedDriverCoordinates) {
+        this.moveDriverSmoothly(updatedDriverCoordinates);
         this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
-            this.fitToMarkers()
+            this.fitToMarkers();
         });
+    }
+
+    moveDriverSmoothly(updatedCoords) {
+        if (this.marker) {
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, 500);
+        }
     }
 
     fitToMarkers() {
@@ -69,9 +76,11 @@ export default class MapsDelivery extends React.Component {
                             this.setState({duration: duration, distance: distance})
                         }}
                     />
-                    <Marker coordinate={this.state.driverCoordinates} title={"Driver"}>
+                    <Marker.Animated
+                        ref={marker => { this.marker = marker; }}
+                        coordinate={this.state.driverCoordinates} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
-                    </Marker>
+                    </Marker.Animated>
                 </MapView>
                 <View style={styles.text}>
                     <Statistics duration={this.state.duration} distance={this.state.distance}/>
