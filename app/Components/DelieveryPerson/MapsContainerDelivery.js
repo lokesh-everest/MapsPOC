@@ -68,7 +68,7 @@ export default class MapsContainerDelivery extends Component {
             }, (error) => {
                 console.log(error)
             },
-            {enableHighAccuracy: false, timeout: 10000, maximumAge: 0, distanceFilter:1},);
+            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0, distanceFilter:1},);
     };
 
     render() {
