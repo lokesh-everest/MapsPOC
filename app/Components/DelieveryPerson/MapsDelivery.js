@@ -51,7 +51,7 @@ export default class MapsDelivery extends React.Component {
                     }}
                     style={{flex: 1}}
                     initialRegion={this.state.initialMap}
-                    showsUserLocation={true}
+                    showsUserLocation={false}
                     onMapReady={this.fitToMarkers}>
                     {
                         this.props.markers.map(marker => (
