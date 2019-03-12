@@ -41,6 +41,15 @@ export default class MapsDelivery extends React.Component {
         })
     }
 
+    _gotoCurrentLocation() {
+        this.mapRef.animateToRegion({
+            latitude: this.state.driverCoordinates.latitude,
+            longitude: this.state.driverCoordinates.longitude,
+            latitudeDelta: 0.0059397161733585335,
+            longitudeDelta: 0.005845874547958374
+        });
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
@@ -74,6 +83,7 @@ export default class MapsDelivery extends React.Component {
                             let coords={latitude:result.coordinates[0].latitude, longitude:result.coordinates[0].longitude};
                             this.props.socket.emit('driverEvent', coords);
                             this.moveDriverSmoothly(coords);
+                            this._gotoCurrentLocation();
                             this.setState({driverMarker:coords, duration: duration, distance: distance})
                         }}
                     />
