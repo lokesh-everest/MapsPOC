@@ -72,6 +72,7 @@ export default class MapsUser extends React.Component {
                         waypoints={this.props.waypoints}
                         strokeColor="blue"
                         strokeWidth={3}
+                        resetOnChange={false}
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
