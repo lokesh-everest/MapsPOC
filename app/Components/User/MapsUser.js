@@ -70,7 +70,7 @@ export default class MapsUser extends React.Component {
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
-                            this._gotoCurrentLocation();
+                            distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
                             this.setState({duration: duration, distance: distance})
                         }}
                     />

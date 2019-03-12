@@ -83,7 +83,7 @@ export default class MapsDelivery extends React.Component {
                             let coords={latitude:result.coordinates[0].latitude, longitude:result.coordinates[0].longitude};
                             this.props.socket.emit('driverEvent', coords);
                             this.moveDriverSmoothly(coords);
-                            this._gotoCurrentLocation();
+                            distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
                             this.setState({driverMarker:coords, duration: duration, distance: distance})
                         }}
                     />
