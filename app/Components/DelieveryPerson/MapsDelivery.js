@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, StyleSheet, Dimensions,Text} from 'react-native';
+import {Button, View, Image, StyleSheet, Dimensions,Text} from 'react-native';
 import MapView, {Marker} from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 import Config from 'react-native-config';
@@ -25,13 +25,7 @@ export default class MapsDelivery extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.updateDriverCoordinates(nextProps.driverCoordinates);
-    }
-
-    updateDriverCoordinates(updatedDriverCoordinates) {
-        this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
-            //this.fitToMarkers();
-        });
+        this.setState({driverCoordinates: nextProps.driverCoordinates});
     }
 
     moveDriverSmoothly(updatedCoords) {
@@ -41,10 +35,10 @@ export default class MapsDelivery extends React.Component {
     }
 
     fitToMarkers() {
-        // this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
-        //     edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
-        //     animated: true
-        // })
+        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            animated: true
+        })
     }
 
     render() {
@@ -92,6 +86,7 @@ export default class MapsDelivery extends React.Component {
                 <View style={styles.text}>
                     <Statistics duration={this.state.duration} distance={this.state.distance}/>
                 </View>
+                <Button title='Fit' onPress={this.fitToMarkers}/>
             </View>
         )
     }

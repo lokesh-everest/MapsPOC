@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, StyleSheet, Dimensions,Text} from 'react-native';
+import {Button, View, Image, StyleSheet, Dimensions,Text} from 'react-native';
 import MapView, {Marker} from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 import Config from 'react-native-config';
@@ -21,20 +21,14 @@ export default class MapsUser extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.updateDriverCoordinates(nextProps.driverCoordinates);
-    }
-
-    updateDriverCoordinates(updatedDriverCoordinates) {
-        this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
-            //this.fitToMarkers()
-        });
+        this.setState({driverCoordinates: nextProps.driverCoordinates});
     }
 
     fitToMarkers() {
-        // this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
-        //     edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
-        //     animated: true
-        // })
+        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            animated: true
+        })
     }
 
     _gotoCurrentLocation() {
@@ -80,13 +74,14 @@ export default class MapsUser extends React.Component {
                             this.setState({duration: duration, distance: distance})
                         }}
                     />
-                    <Marker coordinate={this.state.driverCoordinates} title={"Driver"}>
+                    <Marker.Animated coordinate={this.state.driverCoordinates} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
-                    </Marker>
+                    </Marker.Animated>
                 </MapView>
                 <View style={styles.text}>
                     <Statistics duration={this.state.duration} distance={this.state.distance}/>
                 </View>
+                <Button title='Fit' onPress={this.fitToMarkers}/>
             </View>
         )
     }
