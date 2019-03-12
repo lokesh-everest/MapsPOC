@@ -26,15 +26,24 @@ export default class MapsUser extends React.Component {
 
     updateDriverCoordinates(updatedDriverCoordinates) {
         this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
-            this.fitToMarkers()
+            //this.fitToMarkers()
         });
     }
 
     fitToMarkers() {
-        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
-            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
-            animated: true
-        })
+        // this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+        //     edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+        //     animated: true
+        // })
+    }
+
+    _gotoCurrentLocation() {
+        this.mapRef.animateToRegion({
+            latitude: this.state.driverCoordinates.latitude,
+            longitude: this.state.driverCoordinates.longitude,
+            latitudeDelta: 0.0059397161733585335,
+            longitudeDelta: 0.005845874547958374
+        });
     }
 
     render() {
@@ -66,6 +75,7 @@ export default class MapsUser extends React.Component {
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
+                            this._gotoCurrentLocation();
                             this.setState({duration: duration, distance: distance})
                         }}
                     />

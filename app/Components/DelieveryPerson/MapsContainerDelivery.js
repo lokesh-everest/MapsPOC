@@ -14,7 +14,7 @@ export default class MapsContainerDelivery extends Component {
             latitude: 12.970400,
             longitude: 77.637398
         };
-        this.socket = SocketIOClient('http://13.233.90.8:3000');
+        this.socket = SocketIOClient('http://13.232.206.133:3000');
         this.state = {
             currentSourceCord: userCoordinates,
             destCord: destCord,
@@ -49,7 +49,7 @@ export default class MapsContainerDelivery extends Component {
                 {},
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.intervalId = setInterval(this.updateDriverCoordinates, 1000);
+               this.updateDriverCoordinates();
 
             } else {
                 console.log("Give location permission and  turn on gps");
@@ -60,23 +60,24 @@ export default class MapsContainerDelivery extends Component {
     }
 
     updateDriverCoordinates = () => {
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.watchPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                this.socket.emit('driverEvent', coords);
                 this.state.traveledPathCoordinates.push(coords);
                 this.setState({driverCoordinates: coords});
             }, (error) => {
                 console.log(error)
             },
-            {enableHighAccuracy: false, timeout: 10000, maximumAge: 1000},);
+            {enableHighAccuracy: false, timeout: 10000, maximumAge: 0, distanceFilter:1},);
     };
 
     render() {
         return (
             <MapsDelivery markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
                           initalMap={this.state.initialMap}
-                          sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
+                          sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}
+                          socket={this.socket}
+            />
         )
     }
 

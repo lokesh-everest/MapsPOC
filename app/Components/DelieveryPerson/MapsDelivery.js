@@ -15,7 +15,11 @@ export default class MapsDelivery extends React.Component {
             sourceCoordinates: this.props.sourceCoordinates,
             destinationCoordinates: this.props.destinationCoordinates,
             driverCoordinates: this.props.sourceCoordinates,
-            initialMap: this.props.initialMap
+            initialMap: this.props.initialMap,
+            driverMarker:{
+                latitude: 12.970400,
+                longitude: 77.637398
+            }
         };
         this.fitToMarkers = this.fitToMarkers.bind(this);
     }
@@ -25,9 +29,8 @@ export default class MapsDelivery extends React.Component {
     }
 
     updateDriverCoordinates(updatedDriverCoordinates) {
-        this.moveDriverSmoothly(updatedDriverCoordinates);
         this.setState({driverCoordinates: updatedDriverCoordinates}, () => {
-            this.fitToMarkers();
+            //this.fitToMarkers();
         });
     }
 
@@ -38,10 +41,10 @@ export default class MapsDelivery extends React.Component {
     }
 
     fitToMarkers() {
-        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
-            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
-            animated: true
-        })
+        // this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+        //     edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+        //     animated: true
+        // })
     }
 
     render() {
@@ -73,12 +76,15 @@ export default class MapsDelivery extends React.Component {
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
-                            this.setState({duration: duration, distance: distance})
+                            let coords={latitude:result.coordinates[0].latitude, longitude:result.coordinates[0].longitude};
+                            this.props.socket.emit('driverEvent', coords);
+                            this.moveDriverSmoothly(coords);
+                            this.setState({driverMarker:coords, duration: duration, distance: distance})
                         }}
                     />
                     <Marker.Animated
                         ref={marker => { this.marker = marker; }}
-                        coordinate={this.state.driverCoordinates} title={"Driver"}>
+                        coordinate={this.state.driverMarker} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
                 </MapView>

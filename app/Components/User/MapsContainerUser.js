@@ -13,7 +13,7 @@ export default class MapsContainerUser extends Component {
             latitude: 12.970400,
             longitude: 77.637398
         };
-        this.socket = SocketIOClient('http://13.233.90.8:3000');
+        this.socket = SocketIOClient('http://13.232.206.133:3000');
         this.state = {
             currentSourceCord: sourceCord,
             destCord: destCord,
