@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render correcly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "center",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "red",
+          "borderRadius": 75,
+          "borderWidth": 1,
+          "flexDirection": "column",
+          "height": 150,
+          "justifyContent": "center",
+          "marginRight": 20,
+          "opacity": 1,
+          "width": 150,
+        }
+      }
+    >
+      <Image
+        source={
+          Object {
+            "testUri": "../../../app/assets/home.png",
+          }
+        }
+        style={
+          Object {
+            "height": 50,
+            "width": 50,
+          }
+        }
+      />
+      <Text
+        style={
+          Object {
+            "color": "black",
+          }
+        }
+      >
+        User
+      </Text>
+    </View>
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "red",
+          "borderRadius": 75,
+          "borderWidth": 1,
+          "flexDirection": "column",
+          "height": 150,
+          "justifyContent": "center",
+          "marginRight": 20,
+          "opacity": 1,
+          "width": 150,
+        }
+      }
+    >
+      <Image
+        source={
+          Object {
+            "testUri": "../../../app/assets/delievery.png",
+          }
+        }
+        style={
+          Object {
+            "height": 50,
+            "width": 50,
+          }
+        }
+      />
+      <Text
+        style={
+          Object {
+            "color": "black",
+          }
+        }
+      >
+        Delivery Person
+      </Text>
+    </View>
+  </View>
+</View>
+`;

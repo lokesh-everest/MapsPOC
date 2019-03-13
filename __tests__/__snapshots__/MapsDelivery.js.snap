@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MapsDelivery render correcly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Text>
+    Delivery Person
+  </Text>
+  <MapView
+    onMapReady={[Function]}
+    showsUserLocation={true}
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <MapViewDirections
+      onReady={[Function]}
+      strokeColor="blue"
+      strokeWidth={3}
+    />
+    <MapMarker
+      stopPropagation={false}
+      title="Driver"
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../app/assets/delievery.png",
+          }
+        }
+        style={
+          Object {
+            "height": 30,
+            "width": 30,
+          }
+        }
+      />
+    </MapMarker>
+  </MapView>
+  <View
+    style={
+      Object {
+        "backgroundColor": "black",
+        "bottom": 100,
+        "left": 340,
+        "position": "absolute",
+      }
+    }
+  >
+    <Statitics
+      distance={0}
+      duration={0}
+    />
+  </View>
+</View>
+`;

@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MapsContainerDelivery render correcly 1`] = `
+<MapsDelivery
+  destinationCoordinates={
+    Object {
+      "latitude": 12.9704,
+      "longitude": 77.637398,
+    }
+  }
+  driverCoordinates={
+    Object {
+      "latitude": 12.974963,
+      "longitude": 77.609139,
+    }
+  }
+  initalMap={
+    Object {
+      "latitude": 12.974963,
+      "latitudeDelta": 0.0922,
+      "longitude": 77.609139,
+      "longitudeDelta": 0.0421,
+    }
+  }
+  markers={
+    Array [
+      Object {
+        "coordinates": Object {
+          "latitude": 12.974963,
+          "longitude": 77.609139,
+        },
+        "imagePath": Object {
+          "testUri": "../../../app/assets/restaurant.png",
+        },
+        "key": 1,
+        "title": "Source",
+      },
+      Object {
+        "coordinates": Object {
+          "latitude": 12.9704,
+          "longitude": 77.637398,
+        },
+        "imagePath": Object {
+          "testUri": "../../../app/assets/home.png",
+        },
+        "key": 2,
+        "title": "Destination",
+      },
+    ]
+  }
+  sourceCoordinates={
+    Object {
+      "latitude": 12.974963,
+      "longitude": 77.609139,
+    }
+  }
+/>
+`;
