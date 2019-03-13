@@ -1,8 +1,7 @@
 import 'react-native';
 import React from 'react';
 import HomeScreen from "../app/Components/HomeScreen";
-import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
+import { shallow } from 'enzyme';
 
 describe(HomeScreen,()=>{
     it('user clicked correctly',()=>{

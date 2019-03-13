@@ -1,8 +1,6 @@
 import {Text} from 'react-native';
 import React from 'react';
 import Statitics from "../app/Components/Statistics";
-
-import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 
 describe(Statitics,()=>{

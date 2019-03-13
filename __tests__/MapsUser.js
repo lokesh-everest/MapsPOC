@@ -2,9 +2,7 @@ import 'jsdom-global/register';
 import 'react-native';
 import React from 'react';
 import MapsUser from "../app/Components/User/MapsUser";
-
-import renderer from 'react-test-renderer';
-import { shallow, mount, configure } from 'enzyme';
+import { shallow} from 'enzyme';
 
 describe(MapsUser, () => {
     it('render correcly', () => {
