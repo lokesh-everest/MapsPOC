@@ -54,5 +54,6 @@ exports[`MapsContainerUser render correcly 1`] = `
       "longitude": 77.609139,
     }
   }
+  testId="map"
 />
 `;

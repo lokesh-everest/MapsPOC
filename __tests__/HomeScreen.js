@@ -1,10 +1,20 @@
 import 'react-native';
 import React from 'react';
 import HomeScreen from "../app/Components/HomeScreen";
+import { mount, shallow } from 'enzyme';
+import sinon from 'sinon';
 
-import renderer from 'react-test-renderer';
-
-it('render correcly',()=>{
-    const tree = renderer.create(<HomeScreen />);
-    expect(tree).toMatchSnapshot();
+describe(HomeScreen,()=>{
+    it('user clicked correctly',()=>{
+        const mockFN =  jest.fn();
+        const wrapper = shallow(<HomeScreen navigation={{navigate:mockFN}}/>);
+        wrapper.find('TouchableOpacity[id="user"]').props().onPress();
+        expect(mockFN).toHaveBeenCalledTimes(1);
+    })
+    it('driver clicked correctly',()=>{
+        const mockFN =  jest.fn();
+        const wrapper = shallow(<HomeScreen navigation={{navigate:mockFN}}/>);
+        wrapper.find('TouchableOpacity[id="delivery"]').props().onPress();
+        expect(mockFN).toHaveBeenCalledTimes(1);
+    })
 })

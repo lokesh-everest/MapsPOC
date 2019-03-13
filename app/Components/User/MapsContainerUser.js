@@ -47,7 +47,7 @@ export default class MapsContainerUser extends Component {
 
     render() {
         return (
-            <MapsUser markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
+            <MapsUser testId='map' markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
                       initalMap={this.state.initialMap}
                       sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
         )

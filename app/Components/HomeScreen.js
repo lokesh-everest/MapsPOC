@@ -21,11 +21,11 @@ export default class HomeScreen extends React.Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <TouchableOpacity style={styles.button} onPress={this.handleUserClick}>
+                    <TouchableOpacity id="user" style={styles.button} onPress={this.handleUserClick}>
                         <Image style={{width:50,height:50}} source={require('./../assets/home.png')} />
                             <Text style={{color: 'black'}}>User</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}  onPress={this.handleDeliveryClick}>
+                    <TouchableOpacity id="delivery" style={styles.button}  onPress={this.handleDeliveryClick}>
                         <Image style={{width:50,height:50}} source={require('./../assets/delievery.png')} />
                             <Text style={{color: 'black'}}>Delivery Person</Text>
                     </TouchableOpacity>
