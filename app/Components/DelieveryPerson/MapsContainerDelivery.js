@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import MapsDelivery from "./MapsDelivery";
 import {PermissionsAndroid} from 'react-native';
 import SocketIOClient from 'socket.io-client';
+import Geolocation from 'react-native-geolocation-service';
+import {AppRegistry} from 'react-native';
+import RegisterLocation from './Native';
 
 export default class MapsContainerDelivery extends Component {
     constructor(props) {
@@ -35,8 +38,7 @@ export default class MapsContainerDelivery extends Component {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
-            driverCoordinates: userCoordinates,
-            traveledPathCoordinates: []
+            driverCoordinates: userCoordinates
         }
     }
 
@@ -49,7 +51,9 @@ export default class MapsContainerDelivery extends Component {
                 {},
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-               this.updateDriverCoordinates();
+                RegisterLocation.show();
+                AppRegistry.registerHeadlessTask('updateLocation', () => this.updateLocation);
+                //setInterval(this.updateLocation,1000);
 
             } else {
                 console.log("Give location permission and  turn on gps");
@@ -59,16 +63,17 @@ export default class MapsContainerDelivery extends Component {
         }
     }
 
-    updateDriverCoordinates = () => {
-        navigator.geolocation.watchPosition(
+    updateLocation = async (data) => {
+
+        Geolocation.watchPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                this.state.traveledPathCoordinates.push(coords);
+                console.log(coords);
                 this.setState({driverCoordinates: coords});
             }, (error) => {
                 console.log(error)
             },
-            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0, distanceFilter:1},);
+            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0, distanceFilter: 1});
     };
 
     render() {
