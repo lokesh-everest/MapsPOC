@@ -74,7 +74,7 @@ export default class MapsDelivery extends React.Component {
                         destination={this.state.destinationCoordinates}
                         apikey={Config.GOOGLE_MAPS_API_KEY}
                         waypoints={this.props.waypoints}
-                        strokeColor="#0F85BF"
+                        strokeColor={"#0F85BF"}
                         strokeWidth={7}
                         resetOnChange={false}
                         onReady={result => {
