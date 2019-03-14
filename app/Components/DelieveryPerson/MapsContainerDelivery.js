@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import MapsDelivery from "./MapsDelivery";
-import {PermissionsAndroid} from 'react-native';
+import {AppState,PermissionsAndroid} from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import Geolocation from 'react-native-geolocation-service';
 import {AppRegistry} from 'react-native';
-import RegisterLocation from './Native';
+import BackgroundTask from './Native';
 
 export default class MapsContainerDelivery extends Component {
     constructor(props) {
@@ -44,17 +44,15 @@ export default class MapsContainerDelivery extends Component {
 
 
     async componentDidMount() {
-
+        AppRegistry.registerHeadlessTask('getCurrentLocation', () => this.getCurrentLocation);
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 {},
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                RegisterLocation.show();
-                AppRegistry.registerHeadlessTask('updateLocation', () => this.updateLocation);
-                //setInterval(this.updateLocation,1000);
-
+                this.updateLocation();
+                AppState.addEventListener('change', this._handleAppStateChange);
             } else {
                 console.log("Give location permission and  turn on gps");
             }
@@ -62,6 +60,19 @@ export default class MapsContainerDelivery extends Component {
             console.warn(err);
         }
     }
+
+    componentWillUnmount() {
+        Geolocation.stopObserving();
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (nextAppState.match(/inactive|background/)){
+            BackgroundTask.activate();
+        } else if(nextAppState==='active'){
+            BackgroundTask.deActivate();
+        }
+    };
 
     updateLocation = async (data) => {
 
@@ -74,6 +85,23 @@ export default class MapsContainerDelivery extends Component {
                 console.log(error)
             },
             {enableHighAccuracy: true, timeout: 10000, maximumAge: 0, distanceFilter: 1});
+    };
+
+    getCurrentLocation = async (data) => {
+
+        Geolocation.getCurrentPosition(
+            (position) => {
+                let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                console.log(coords);
+                let driverCoordinates = this.state.driverCoordinates;
+                if (driverCoordinates.latitude === coords.latitude && driverCoordinates.longitude === coords.longitude) {
+                    return;
+                }
+                this.setState({driverCoordinates: coords});
+            }, (error) => {
+                console.log(error)
+            },
+            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
     };
 
     render() {

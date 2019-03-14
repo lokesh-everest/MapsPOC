@@ -3,6 +3,7 @@ package com.mapspoc;
 import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
+import com.mapspoc.background_task.BackgroundTaskPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -14,7 +15,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+public class    MainApplication extends Application implements ReactApplication {
 
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -28,7 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
                     new RNFusedLocationPackage(),
-                    new CustomLocationPackage(),
+                    new BackgroundTaskPackage(),
                     new RNGestureHandlerPackage(),
                     new ReactNativeConfigPackage(),
                     new MapsPackage()
