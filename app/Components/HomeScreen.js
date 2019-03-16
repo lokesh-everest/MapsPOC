@@ -10,39 +10,23 @@ export default class HomeScreen extends React.Component {
     };
     render() {
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: "column",
-                    justifyContent: "center"
-                }}
-            >
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
-                >
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.handleUserClick}
-                    >
-                        <Image
-                            style={{ width: 50, height: 50 }}
-                            source={require("./../assets/home.png")}
-                        />
-                        <Text style={{ color: "black" }}>User</Text>
+            <View style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity style={styles.button} onPress={this.handleUserClick}>
+                        <Image style={{width:50,height:50}} source={require('./../assets/home.png')} />
+                            <Text style={{color: 'black'}}>User</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.handleDeliveryClick}
-                    >
-                        <Image
-                            style={{ width: 50, height: 50 }}
-                            source={require("./../assets/delievery.png")}
-                        />
-                        <Text style={{ color: "black" }}>Delivery Person</Text>
+                    <TouchableOpacity style={styles.button}  onPress={this.handleDeliveryClick}>
+                        <Image style={{width:30,height:60}} source={require('./../assets/delievery.png')} />
+                            <Text style={{color: 'black'}}>Delivery Person</Text>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -33,21 +33,15 @@ export default class MapsDelivery extends React.Component {
 
     moveDriverSmoothly(updatedCoords, timeToTraverse) {
         if (this.marker) {
-            this.marker._component.animateMarkerToCoordinate(
-                updatedCoords,
-                timeToTraverse
-            );
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, timeToTraverse);
         }
     }
 
     fitToMarkers() {
-        this.mapRef.fitToCoordinates(
-            [this.state.driverCoordinates, this.state.destinationCoordinates],
-            {
-                edgePadding: { top: 50, right: 20, bottom: 20, left: 20 },
-                animated: true
-            }
-        );
+        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            animated: true
+        });
     }
 
     _gotoCurrentLocation() {
@@ -143,13 +137,9 @@ export default class MapsDelivery extends React.Component {
                         ref={marker => {
                             this.marker = marker;
                         }}
-                        coordinate={this.state.driverMarker}
-                        title={"Driver"}
-                    >
-                        <Image
-                            style={{ width: 30, height: 30 }}
-                            source={require("./../../assets/delievery.png")}
-                        />
+                        style={{transform: [{rotate: '0deg'}]}}
+                        coordinate={this.state.driverMarker} title={"Driver"}>
+                        <Image style={{width: 20, height: 40}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
                 </MapView>
                 <View>
