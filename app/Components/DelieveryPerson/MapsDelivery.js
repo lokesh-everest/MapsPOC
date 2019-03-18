@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, View, Image, StyleSheet, Dimensions,Text} from 'react-native';
+import {Button, View, Image, StyleSheet, Dimensions, Text} from 'react-native';
 import MapView, {Marker} from "react-native-maps";
 import MapViewDirections from 'react-native-maps-directions';
 import Config from 'react-native-config';
@@ -16,7 +16,7 @@ export default class MapsDelivery extends React.Component {
             destinationCoordinates: this.props.destinationCoordinates,
             driverCoordinates: this.props.sourceCoordinates,
             initialMap: this.props.initialMap,
-            driverMarker:{
+            driverMarker: {
                 latitude: 12.970400,
                 longitude: 77.637398
             }
@@ -28,9 +28,9 @@ export default class MapsDelivery extends React.Component {
         this.setState({driverCoordinates: nextProps.driverCoordinates});
     }
 
-    moveDriverSmoothly(updatedCoords) {
+    moveDriverSmoothly(updatedCoords, timeToTraverse) {
         if (this.marker) {
-            this.marker._component.animateMarkerToCoordinate(updatedCoords, 500);
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, timeToTraverse);
         }
     }
 
@@ -80,15 +80,26 @@ export default class MapsDelivery extends React.Component {
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
-                            let coords={latitude:result.coordinates[0].latitude, longitude:result.coordinates[0].longitude};
+                            let coords = {
+                                latitude: result.coordinates[0].latitude,
+                                longitude: result.coordinates[0].longitude
+                            };
                             this.props.socket.emit('driverEvent', coords);
-                            this.moveDriverSmoothly(coords);
+                            let timeToTraverse = 2000;
+                            const distanceMoved = Math.abs(this.state.distance - distance);
+                            if (distanceMoved < 0.5) {
+                                timeToTraverse = (distanceMoved / 0.2) * 1000;
+                            }
+                            this.moveDriverSmoothly(coords, timeToTraverse);
                             distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
-                            this.setState({driverMarker:coords, duration: duration, distance: distance})
+                            this.setState({driverMarker: coords, duration: duration, distance: distance})
                         }}
                     />
                     <Marker.Animated
-                        ref={marker => { this.marker = marker; }}
+                        ref={marker => {
+                            this.marker = marker;
+                        }}
+                        style={{transform: [{rotate: this.state.angle + 'deg'}]}}
                         coordinate={this.state.driverMarker} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
@@ -101,20 +112,20 @@ export default class MapsDelivery extends React.Component {
         )
     }
 }
-const styles=StyleSheet.create({
-    text:{
+const styles = StyleSheet.create({
+    text: {
         bottom: 100,
-        left: Dimensions.get('window').width/2-35,
+        left: Dimensions.get('window').width / 2 - 35,
         position: "absolute",
-        backgroundColor:"black",
+        backgroundColor: "black",
     },
-    map:{
-        flex:1,
+    map: {
+        flex: 1,
         zIndex: -1
     },
-    button:{
-        bottom:100,
-        left:Dimensions.get('window').width/2-90,
-        position:"absolute",
+    button: {
+        bottom: 100,
+        left: Dimensions.get('window').width / 2 - 90,
+        position: "absolute",
     }
 })
