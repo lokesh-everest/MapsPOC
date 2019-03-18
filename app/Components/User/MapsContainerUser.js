@@ -17,20 +17,17 @@ export default class MapsContainerUser extends Component {
         this.state = {
             currentSourceCord: sourceCord,
             destCord: destCord,
-            markers: [
-                {
-                    key: 1,
-                    coordinates: sourceCord,
-                    title: "Source",
-                    imagePath: require("./../../assets/restaurant.png")
-                },
-                {
-                    key: 2,
-                    coordinates: destCord,
-                    title: "Destination",
-                    imagePath: require("./../../assets/home.png")
-                }
-            ],
+            markers: [{
+                key: 1,
+                coordinates: sourceCord,
+                title: "Source",
+                imagePath: require("./../../assets/restaurant.png")
+            }, {
+                key: 2,
+                coordinates: destCord,
+                title: "Destination",
+                imagePath: require("./../../assets/home.png")
+            }],
             initialMap: {
                 latitude: sourceCord.latitude,
                 longitude: sourceCord.longitude,
@@ -38,13 +35,14 @@ export default class MapsContainerUser extends Component {
                 longitudeDelta: 0.0421
             },
             driverCoordinates: sourceCord,
+            angle: 0,
             traveledPathCoordinates: []
         };
     }
 
     componentDidMount() {
-        this.socket.on("customerEvent", message => {
-            this.setState({ driverCoordinates: message });
+        this.socket.on('customerEvent', (message) => {
+            this.setState({driverCoordinates:message.coords, angle: message.angle});
         });
     }
     static navigationOptions = ({}) => {
@@ -54,13 +52,12 @@ export default class MapsContainerUser extends Component {
     };
     render() {
         return (
-            <MapsUser
-                markers={this.state.markers}
-                driverCoordinates={this.state.driverCoordinates}
-                initalMap={this.state.initialMap}
-                sourceCoordinates={this.state.currentSourceCord}
-                destinationCoordinates={this.state.destCord}
-            />
-        );
+            <MapsUser markers={this.state.markers}
+                      driverCoordinates={this.state.driverCoordinates}
+                      angle={this.state.angle}
+                      initalMap={this.state.initialMap}
+                      sourceCoordinates={this.state.currentSourceCord}
+                      destinationCoordinates={this.state.destCord}/>
+        )
     }
 }

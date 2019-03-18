@@ -13,6 +13,7 @@ export default class MapsDelivery extends React.Component {
         super(props);
         this.mapRef = null;
         this.state = {
+            angle: 0,
             distance: 0,
             duration: 0,
             sourceCoordinates: this.props.sourceCoordinates,
@@ -28,7 +29,8 @@ export default class MapsDelivery extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ driverCoordinates: nextProps.driverCoordinates });
+        const rotationAngle = this.findRotationAngle(nextProps.driverCoordinates);
+        this.setState({driverCoordinates: nextProps.driverCoordinates, angle: rotationAngle});
     }
 
     moveDriverSmoothly(updatedCoords, timeToTraverse) {
@@ -37,11 +39,36 @@ export default class MapsDelivery extends React.Component {
         }
     }
 
+    findRotationAngle(newDriverCoordinates) {
+        var angle = this.findAngle(this.state.driverCoordinates, newDriverCoordinates);
+        const DOWN = 0, PI_ANGLE = 180;
+        var rotationAngle = angle;
+        var directionOfMovement = newDriverCoordinates.longitude - this.state.driverCoordinates.longitude;
+        if (directionOfMovement < DOWN) {
+            if (angle >= 0) {
+                rotationAngle = PI_ANGLE + angle;
+            }
+        } else {
+            if (angle < 0) {
+                rotationAngle = PI_ANGLE + angle;
+            }
+        }
+        return rotationAngle
+    }
+
     fitToMarkers() {
         this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
             edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
             animated: true
         });
+    }
+
+    findAngle(oldDriverCoordinates, newDriverCoordinates) {
+        var longitudeDiff = newDriverCoordinates.longitude - oldDriverCoordinates.longitude;
+        var latitudeDiff = newDriverCoordinates.latitude - oldDriverCoordinates.latitude;
+        var radians = Math.atan(longitudeDiff / latitudeDiff);
+        var degrees = radians * 180 / Math.PI;
+        return degrees;
     }
 
     _gotoCurrentLocation() {
@@ -55,15 +82,14 @@ export default class MapsDelivery extends React.Component {
     isDriverNearToDestination = () => {
         const destinationLatitude = this.state.destinationCoordinates.latitude;
         const destinationLongitude = this.state.destinationCoordinates.longitude;
-        const driverLatitude = this.state.driverMarker.latitude;
-        const driverLongitude = this.state.driverMarker.longitude;
+        const driverLatitude = this.state.driverCoordinates.latitude;
+        const driverLongitude = this.state.driverCoordinates.longitude;
         const distance = distanceInKmBetweenEarthCoordinates(
             driverLatitude,
             driverLongitude,
             destinationLatitude,
             destinationLongitude
         );
-        console.log(distance);
         return distance <= 0.1;
     };
     getCompleted = () => {
@@ -86,7 +112,7 @@ export default class MapsDelivery extends React.Component {
                         latitude: result.coordinates[0].latitude,
                         longitude: result.coordinates[0].longitude
                     };
-                    this.props.socket.emit("driverEvent", coords);
+                    this.props.socket.emit("driverEvent", { coords: coords, angle: this.state.angle });
                     let timeToTraverse = 2000;
                     const distanceMoved = Math.abs(
                         this.state.distance - distance
@@ -137,7 +163,7 @@ export default class MapsDelivery extends React.Component {
                         ref={marker => {
                             this.marker = marker;
                         }}
-                        style={{transform: [{rotate: '0deg'}]}}
+                        style={{transform: [{rotate: this.state.angle + 'deg'}]}}
                         coordinate={this.state.driverMarker} title={"Driver"}>
                         <Image style={{width: 20, height: 40}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>

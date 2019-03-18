@@ -127,7 +127,7 @@ export default class MapsUser extends React.Component {
                     <Marker.Animated
                         ref={marker => {this.marker = marker;}}
                         style={{
-                            transform: [{ rotate: '0deg' }]
+                            transform: [{ rotate: this.props.angle + 'deg' }]
                         }}
                         coordinate={this.state.driverCoordinates} title={"Driver"}>
                         <Image style={{width: 20, height: 40}} source={require("./../../assets/delievery.png")}/>
