@@ -31,6 +31,12 @@ export default class MapsUser extends React.Component {
         })
     }
 
+    moveDriverSmoothly(updatedCoords, timeToTraverse) {
+        if (this.marker) {
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, timeToTraverse);
+        }
+    }
+
     _gotoCurrentLocation() {
         this.mapRef.animateToRegion({
             latitude: this.state.driverCoordinates.latitude,
@@ -70,11 +76,20 @@ export default class MapsUser extends React.Component {
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
+                            let timeToTraverse = 2000;
+                            const distanceMoved = Math.abs(this.state.distance - distance);
+                            if (distanceMoved < 0.5) {
+                                timeToTraverse = (distanceMoved / 0.2) * 1000;
+                            }
+                            this.moveDriverSmoothly(this.state.driverCoordinates, timeToTraverse);
                             distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
                             this.setState({duration: duration, distance: distance})
                         }}
                     />
-                    <Marker.Animated coordinate={this.state.driverCoordinates} title={"Driver"}>
+                    <Marker.Animated
+                        ref={marker => {
+                        this.marker = marker;}}
+                        coordinate={this.state.driverCoordinates} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
                 </MapView>
