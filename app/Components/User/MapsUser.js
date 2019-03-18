@@ -31,6 +31,12 @@ export default class MapsUser extends React.Component {
         })
     }
 
+    moveDriverSmoothly(updatedCoords, timeToTraverse) {
+        if (this.marker) {
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, timeToTraverse);
+        }
+    }
+
     _gotoCurrentLocation() {
         this.mapRef.animateToRegion({
             latitude: this.state.driverCoordinates.latitude,
@@ -50,7 +56,7 @@ export default class MapsUser extends React.Component {
                     }}
                     style={{flex: 1}}
                     initialRegion={this.state.initialMap}
-                    showsUserLocation={true}
+                    showsUserLocation={false}
                     onMapReady={this.fitToMarkers}>
                     {
                         this.props.markers.map(marker => (
@@ -64,17 +70,26 @@ export default class MapsUser extends React.Component {
                         destination={this.state.destinationCoordinates}
                         apikey={Config.GOOGLE_MAPS_API_KEY}
                         waypoints={this.props.waypoints}
-                        strokeColor="blue"
-                        strokeWidth={3}
+                        strokeColor={"#0F85BF"}
+                        strokeWidth={7}
                         resetOnChange={false}
                         onReady={result => {
                             const duration = Math.ceil(result.duration);
                             const distance = Math.round(result.distance * 100) / 100;
+                            let timeToTraverse = 2000;
+                            const distanceMoved = Math.abs(this.state.distance - distance);
+                            if (distanceMoved < 0.5) {
+                                timeToTraverse = (distanceMoved / 0.2) * 1000;
+                            }
+                            this.moveDriverSmoothly(this.state.driverCoordinates, timeToTraverse);
                             distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
                             this.setState({duration: duration, distance: distance})
                         }}
                     />
-                    <Marker.Animated coordinate={this.state.driverCoordinates} title={"Driver"}>
+                    <Marker.Animated
+                        ref={marker => {
+                        this.marker = marker;}}
+                        coordinate={this.state.driverCoordinates} title={"Driver"}>
                         <Image style={{width: 30, height: 30}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
                 </MapView>
