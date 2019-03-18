@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import MapsDelivery from "./MapsDelivery";
-import { PermissionsAndroid } from "react-native";
-import SocketIOClient from "socket.io-client";
+import {AppState,PermissionsAndroid} from 'react-native';
+import SocketIOClient from 'socket.io-client';
+import Geolocation from 'react-native-geolocation-service';
+import {AppRegistry} from 'react-native';
+import BackgroundTask from './Native';
 
 export default class MapsContainerDelivery extends Component {
     constructor(props) {
@@ -38,19 +41,20 @@ export default class MapsContainerDelivery extends Component {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             },
-            driverCoordinates: userCoordinates,
-            traveledPathCoordinates: []
-        };
+            driverCoordinates: userCoordinates
+        }
     }
 
     async componentDidMount() {
+        AppRegistry.registerHeadlessTask('getCurrentLocation', () => this.getCurrentLocation);
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 {}
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.updateDriverCoordinates();
+                this.updateLocation();
+                AppState.addEventListener('change', this._handleAppStateChange);
             } else {
                 console.log("Give location permission and  turn on gps");
             }
@@ -59,32 +63,47 @@ export default class MapsContainerDelivery extends Component {
         }
     }
 
-    updateDriverCoordinates = () => {
-        navigator.geolocation.watchPosition(
-            position => {
-                let coords = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                };
-                this.state.traveledPathCoordinates.push(coords);
-                console.log("updating...");
-                this.setState({ driverCoordinates: coords });
-            },
-            error => {
-                console.log(error);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0,
-                distanceFilter: 1
-            }
-        );
+    componentWillUnmount() {
+        Geolocation.stopObserving();
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (nextAppState.match(/inactive|background/)){
+            BackgroundTask.activate();
+        } else if(nextAppState==='active'){
+            BackgroundTask.deActivate();
+        }
     };
-    static navigationOptions = ({}) => {
-        return {
-            headerTitle: "Delivery"
-        };
+
+    updateLocation = async (data) => {
+
+        Geolocation.watchPosition(
+            (position) => {
+                let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                console.log(coords);
+                this.setState({driverCoordinates: coords});
+            }, (error) => {
+                console.log(error)
+            },
+            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0, distanceFilter: 1});
+    };
+
+    getCurrentLocation = async (data) => {
+        console.log('get');
+        Geolocation.getCurrentPosition(
+            (position) => {
+                let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
+                console.log(coords);
+                let driverCoordinates = this.state.driverCoordinates;
+                if (driverCoordinates.latitude === coords.latitude && driverCoordinates.longitude === coords.longitude) {
+                    return;
+                }
+                this.setState({driverCoordinates: coords});
+            }, (error) => {
+                console.log(error)
+            },
+            {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
     };
     render() {
         return (

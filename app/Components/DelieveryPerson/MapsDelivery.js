@@ -31,11 +31,11 @@ export default class MapsDelivery extends React.Component {
         this.setState({ driverCoordinates: nextProps.driverCoordinates });
     }
 
-    moveDriverSmoothly(updatedCoords) {
+    moveDriverSmoothly(updatedCoords, timeToTraverse) {
         if (this.marker) {
             this.marker._component.animateMarkerToCoordinate(
                 updatedCoords,
-                500
+                timeToTraverse
             );
         }
     }
@@ -60,10 +60,9 @@ export default class MapsDelivery extends React.Component {
     }
     isDriverNearToDestination = () => {
         const destinationLatitude = this.state.destinationCoordinates.latitude;
-        const destinationLongitude = this.state.destinationCoordinates
-            .longitude;
-        const driverLatitude = this.state.driverCoordinates.latitude;
-        const driverLongitude = this.state.destinationCoordinates.longitude;
+        const destinationLongitude = this.state.destinationCoordinates.longitude;
+        const driverLatitude = this.state.driverMarker.latitude;
+        const driverLongitude = this.state.driverMarker.longitude;
         const distance = distanceInKmBetweenEarthCoordinates(
             driverLatitude,
             driverLongitude,
@@ -77,33 +76,42 @@ export default class MapsDelivery extends React.Component {
         return <ReachedMessage text={"You are at destination"} />;
     };
     getDirections = () => {
-        <MapViewDirections
-            origin={this.state.driverCoordinates}
-            destination={this.state.destinationCoordinates}
-            apikey={Config.GOOGLE_MAPS_API_KEY}
-            waypoints={this.props.waypoints}
-            strokeColor="blue"
-            strokeWidth={3}
-            resetOnChange={false}
-            onReady={result => {
-                const duration = Math.ceil(result.duration);
-                const distance = Math.round(result.distance * 100) / 100;
-                let coords = {
-                    latitude: result.coordinates[0].latitude,
-                    longitude: result.coordinates[0].longitude
-                };
-                this.props.socket.emit("driverEvent", coords);
-                this.moveDriverSmoothly(coords);
-                distance > 1
-                    ? this._gotoCurrentLocation()
-                    : this.fitToMarkers();
-                this.setState({
-                    driverMarker: coords,
-                    duration: duration,
-                    distance: distance
-                });
-            }}
-        />;
+        return (
+            <MapViewDirections
+                origin={this.state.driverCoordinates}
+                destination={this.state.destinationCoordinates}
+                apikey={Config.GOOGLE_MAPS_API_KEY}
+                waypoints={this.props.waypoints}
+                strokeColor={"#0F85BF"}
+                strokeWidth={7}
+                resetOnChange={false}
+                onReady={result => {
+                    const duration = Math.ceil(result.duration);
+                    const distance = Math.round(result.distance * 100) / 100;
+                    let coords = {
+                        latitude: result.coordinates[0].latitude,
+                        longitude: result.coordinates[0].longitude
+                    };
+                    this.props.socket.emit("driverEvent", coords);
+                    let timeToTraverse = 2000;
+                    const distanceMoved = Math.abs(
+                        this.state.distance - distance
+                    );
+                    if (distanceMoved < 0.5) {
+                        timeToTraverse = (distanceMoved / 0.2) * 1000;
+                    }
+                    this.moveDriverSmoothly(coords, timeToTraverse);
+                    distance > 1
+                        ? this._gotoCurrentLocation()
+                        : this.fitToMarkers();
+                    this.setState({
+                        driverMarker: coords,
+                        duration: duration,
+                        distance: distance
+                    });
+                }}
+            />
+        );
     };
     render() {
         const isDriverNearToDestination = this.isDriverNearToDestination();
@@ -137,7 +145,6 @@ export default class MapsDelivery extends React.Component {
                         }}
                         coordinate={this.state.driverMarker}
                         title={"Driver"}
-                        description="Destination arrived"
                     >
                         <Image
                             style={{ width: 30, height: 30 }}
