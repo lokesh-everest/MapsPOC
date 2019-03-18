@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 import MapsUser from "./MapsUser";
-import SocketIOClient from 'socket.io-client';
+import SocketIOClient from "socket.io-client";
 
 export default class MapsContainerUser extends Component {
     constructor(props) {
@@ -10,24 +10,27 @@ export default class MapsContainerUser extends Component {
             longitude: 77.609139
         };
         const destCord = {
-            latitude: 12.970400,
+            latitude: 12.9704,
             longitude: 77.637398
         };
-        this.socket = SocketIOClient('http://13.232.206.133:3000');
+        this.socket = SocketIOClient("http://13.232.206.133:3000");
         this.state = {
             currentSourceCord: sourceCord,
             destCord: destCord,
-            markers: [{
-                key: 1,
-                coordinates: sourceCord,
-                title: "Source",
-                imagePath: require("./../../assets/restaurant.png")
-            }, {
-                key: 2,
-                coordinates: destCord,
-                title: "Destination",
-                imagePath: require("./../../assets/home.png")
-            }],
+            markers: [
+                {
+                    key: 1,
+                    coordinates: sourceCord,
+                    title: "Source",
+                    imagePath: require("./../../assets/restaurant.png")
+                },
+                {
+                    key: 2,
+                    coordinates: destCord,
+                    title: "Destination",
+                    imagePath: require("./../../assets/home.png")
+                }
+            ],
             initialMap: {
                 latitude: sourceCord.latitude,
                 longitude: sourceCord.longitude,
@@ -36,21 +39,28 @@ export default class MapsContainerUser extends Component {
             },
             driverCoordinates: sourceCord,
             traveledPathCoordinates: []
-        }
+        };
     }
 
     componentDidMount() {
-        this.socket.on('customerEvent', (message) => {
-            this.setState({driverCoordinates:message});
+        this.socket.on("customerEvent", message => {
+            this.setState({ driverCoordinates: message });
         });
     }
-
+    static navigationOptions = ({}) => {
+        return {
+            headerTitle: "User"
+        };
+    };
     render() {
         return (
-            <MapsUser markers={this.state.markers} driverCoordinates={this.state.driverCoordinates}
-                      initalMap={this.state.initialMap}
-                      sourceCoordinates={this.state.currentSourceCord} destinationCoordinates={this.state.destCord}/>
-        )
+            <MapsUser
+                markers={this.state.markers}
+                driverCoordinates={this.state.driverCoordinates}
+                initalMap={this.state.initialMap}
+                sourceCoordinates={this.state.currentSourceCord}
+                destinationCoordinates={this.state.destCord}
+            />
+        );
     }
-
 }

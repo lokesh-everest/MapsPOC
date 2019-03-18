@@ -1,4 +1,4 @@
-import {createAppContainer, createStackNavigator} from "react-navigation";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 import HomeScreen from "./HomeScreen";
 import MapsContainerDelivery from "./DelieveryPerson/MapsContainerDelivery";
 import MapsContainerUser from "./User/MapsContainerUser";
@@ -6,11 +6,11 @@ import MapsContainerUser from "./User/MapsContainerUser";
 const RootStack = createStackNavigator(
     {
         HomeScreen: HomeScreen,
-        MapsContainerDelivery:MapsContainerDelivery,
-        MapsContainerUser:MapsContainerUser
+        MapsContainerDelivery: MapsContainerDelivery,
+        MapsContainerUser: MapsContainerUser
     },
     {
-        initialRouteName: 'HomeScreen',
+        initialRouteName: "HomeScreen"
     }
 );
 
