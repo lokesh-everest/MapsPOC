@@ -104,6 +104,11 @@ export default class MapsContainerDelivery extends Component {
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     };
+    static navigationOptions = ({}) => {
+        return {
+            headerTitle: "Delivery person"
+        };
+    };
     render() {
         return (
             <MapsDelivery
