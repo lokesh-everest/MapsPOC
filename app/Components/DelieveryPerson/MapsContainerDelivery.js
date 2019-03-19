@@ -80,7 +80,6 @@ export default class MapsContainerDelivery extends Component {
         Geolocation.watchPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                console.log(coords);
                 this.setState({driverCoordinates: coords});
             }, (error) => {
                 console.log(error)
@@ -92,7 +91,6 @@ export default class MapsContainerDelivery extends Component {
         Geolocation.getCurrentPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
-                console.log(coords);
                 let driverCoordinates = this.state.driverCoordinates;
                 if (driverCoordinates.latitude === coords.latitude && driverCoordinates.longitude === coords.longitude) {
                     return;

@@ -28,21 +28,15 @@ export default class MapsUser extends React.Component {
     }
 
     fitToMarkers() {
-        this.mapRef.fitToCoordinates(
-            [this.state.driverCoordinates, this.state.destinationCoordinates],
-            {
-                edgePadding: { top: 50, right: 20, bottom: 20, left: 20 },
-                animated: true
-            }
-        );
+        this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
+            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            animated: true
+        });
     }
 
     moveDriverSmoothly(updatedCoords, timeToTraverse) {
         if (this.marker) {
-            this.marker._component.animateMarkerToCoordinate(
-                updatedCoords,
-                timeToTraverse
-            );
+            this.marker._component.animateMarkerToCoordinate(updatedCoords, timeToTraverse);
         }
     }
 
@@ -131,16 +125,12 @@ export default class MapsUser extends React.Component {
                     ))}
                     {isDriverNearToDestination ? <></> : this.getDirections()}
                     <Marker.Animated
-                        ref={marker => {
-                            this.marker = marker;
+                        ref={marker => {this.marker = marker;}}
+                        style={{
+                            transform: [{ rotate: this.props.angle + 'deg' }]
                         }}
-                        coordinate={this.state.driverCoordinates}
-                        title={"Driver"}
-                    >
-                        <Image
-                            style={{ width: 30, height: 30 }}
-                            source={require("./../../assets/delievery.png")}
-                        />
+                        coordinate={this.state.driverCoordinates} title={"Driver"}>
+                        <Image style={{width: 20, height: 40}} source={require("./../../assets/delievery.png")}/>
                     </Marker.Animated>
                 </MapView>
                 <View>
