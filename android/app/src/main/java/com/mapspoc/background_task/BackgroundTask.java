@@ -1,5 +1,6 @@
 package com.mapspoc.background_task;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -15,11 +16,12 @@ public class BackgroundTask extends ReactContextBaseJavaModule {
 
     private static Timer timer;
 
-    private final Context mContext;
+    @SuppressLint("StaticFieldLeak")
+    private  static Context mContext=null;
 
     public BackgroundTask(ReactApplicationContext reactContext) {
         super(reactContext);
-        this.mContext = reactContext;
+        mContext = reactContext;
     }
 
     @Override
@@ -42,6 +44,7 @@ public class BackgroundTask extends ReactContextBaseJavaModule {
     }
 
     private void runTask() {
+        System.out.println("running");
         Intent myIntent = new Intent(mContext, BackgroundTaskService.class);
         mContext.startService(myIntent);
         HeadlessJsTaskService.acquireWakeLockNow(mContext);
@@ -50,6 +53,7 @@ public class BackgroundTask extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void deActivate() {
+        System.out.println("deActive");
         if (timer != null) {
             timer.cancel();
             timer.purge();

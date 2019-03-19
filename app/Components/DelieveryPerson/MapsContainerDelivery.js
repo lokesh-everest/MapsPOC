@@ -76,8 +76,7 @@ export default class MapsContainerDelivery extends Component {
         }
     };
 
-    updateLocation = async (data) => {
-
+    updateLocation = () => {
         Geolocation.watchPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
@@ -90,7 +89,6 @@ export default class MapsContainerDelivery extends Component {
     };
 
     getCurrentLocation = async (data) => {
-        console.log('get');
         Geolocation.getCurrentPosition(
             (position) => {
                 let coords = {latitude: position.coords.latitude, longitude: position.coords.longitude};
