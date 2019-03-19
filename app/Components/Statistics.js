@@ -4,24 +4,13 @@ import { View, StyleSheet, Text } from "react-native";
 export default class Statitics extends Component {
     render() {
         return (
-            <View
-                style={[
-                    styles.stats,
-                    { backgroundColor: this.props.reachedText ? "" : "" }
-                ]}
-            >
+            <View style={[styles.stats, { backgroundColor: this.props.reachedText ? "" : "" }]}>
                 <View>
-                    <Text style={styles.duration}>
-                        {this.props.duration} min
-                    </Text>
-                    <Text style={styles.distance}>
-                        {this.props.distance} Km
-                    </Text>
+                    <Text style={styles.duration}>{this.props.duration} min</Text>
+                    <Text style={styles.distance}>{this.props.distance} Km</Text>
                 </View>
                 <View>
-                    <Text style={styles.reachedText}>
-                        {this.props.reachedText}
-                    </Text>
+                    <Text style={styles.reachedText}>{this.props.reachedText}</Text>
                 </View>
             </View>
         );

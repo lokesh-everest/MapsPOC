@@ -5,7 +5,6 @@ import MapViewDirections from "react-native-maps-directions";
 import Config from "react-native-config";
 import Statistics from "../Statistics";
 import { distanceInKmBetweenEarthCoordinates } from "../functions";
-import ReachedMessage from "../ReachedMessage";
 import FitButton from "../FitButton";
 
 export default class MapsUser extends React.Component {
@@ -29,7 +28,7 @@ export default class MapsUser extends React.Component {
 
     fitToMarkers() {
         this.mapRef.fitToCoordinates([this.state.driverCoordinates, this.state.destinationCoordinates], {
-            edgePadding: {top: 50, right: 20, bottom: 20, left: 20},
+            edgePadding: { top: 50, right: 20, bottom: 20, left: 20 },
             animated: true
         });
     }
@@ -49,9 +48,9 @@ export default class MapsUser extends React.Component {
         });
     }
     isDriverNearToDestination = () => {
+        const MINIMUM_DISTANCE = 0.015;
         const destinationLatitude = this.state.destinationCoordinates.latitude;
-        const destinationLongitude = this.state.destinationCoordinates
-            .longitude;
+        const destinationLongitude = this.state.destinationCoordinates.longitude;
         const driverLatitude = this.state.driverCoordinates.latitude;
         const driverLongitude = this.state.destinationCoordinates.longitude;
         return (
@@ -60,11 +59,8 @@ export default class MapsUser extends React.Component {
                 driverLongitude,
                 destinationLatitude,
                 destinationLongitude
-            ) <= 0.01
+            ) <= MINIMUM_DISTANCE
         );
-    };
-    getCompleted = () => {
-        return <ReachedMessage text={"Delivery has arrived"} />;
     };
     getDirections = () => {
         return (
@@ -80,19 +76,12 @@ export default class MapsUser extends React.Component {
                     const duration = Math.ceil(result.duration);
                     const distance = Math.round(result.distance * 100) / 100;
                     let timeToTraverse = 2000;
-                    const distanceMoved = Math.abs(
-                        this.state.distance - distance
-                    );
+                    const distanceMoved = Math.abs(this.state.distance - distance);
                     if (distanceMoved < 0.5) {
                         timeToTraverse = (distanceMoved / 0.2) * 1000;
                     }
-                    this.moveDriverSmoothly(
-                        this.state.driverCoordinates,
-                        timeToTraverse
-                    );
-                    distance > 1
-                        ? this._gotoCurrentLocation()
-                        : this.fitToMarkers();
+                    this.moveDriverSmoothly(this.state.driverCoordinates, timeToTraverse);
+                    distance > 1 ? this._gotoCurrentLocation() : this.fitToMarkers();
                     this.setState({ duration: duration, distance: distance });
                 }}
             />
@@ -109,18 +98,10 @@ export default class MapsUser extends React.Component {
                     style={{ flex: 1 }}
                     initialRegion={this.state.initialMap}
                     showsUserLocation={false}
-                    onMapReady={this.fitToMarkers}
-                >
+                    onMapReady={this.fitToMarkers}>
                     {this.props.markers.map(marker => (
-                        <Marker
-                            key={marker.key}
-                            coordinate={marker.coordinates}
-                            title={marker.title}
-                        >
-                            <Image
-                                style={{ width: 30, height: 30 }}
-                                source={marker.imagePath}
-                            />
+                        <Marker key={marker.key} coordinate={marker.coordinates} title={marker.title}>
+                            <Image style={{ width: 30, height: 30 }} source={marker.imagePath} />
                         </Marker>
                     ))}
                     {isDriverNearToDestination ? <></> : this.getDirections()}
@@ -137,11 +118,7 @@ export default class MapsUser extends React.Component {
                     <Statistics
                         duration={this.state.duration}
                         distance={this.state.distance}
-                        reachedText={
-                            isDriverNearToDestination
-                                ? "You are at destination"
-                                : ""
-                        }
+                        reachedText={isDriverNearToDestination ? "You are at destination" : ""}
                     />
                 </View>
                 <View style={styles.button}>
