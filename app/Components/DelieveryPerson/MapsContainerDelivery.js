@@ -5,6 +5,8 @@ import SocketIOClient from "socket.io-client";
 import Geolocation from "react-native-geolocation-service";
 import { AppRegistry } from "react-native";
 import BackgroundTask from "./Native";
+import { fetchRoute } from "../functions";
+import Config from "react-native-config";
 
 export default class MapsContainerDelivery extends Component {
     constructor(props) {
@@ -58,6 +60,13 @@ export default class MapsContainerDelivery extends Component {
         } catch (err) {
             console.warn(err);
         }
+        fetchRoute(this.state.currentSourceCord,[],this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
+            (result) => {
+                this.setState({
+                    destCord:result.coordinates[result.coordinates.length-1]
+                });
+            }
+        )
     }
 
     componentWillUnmount() {

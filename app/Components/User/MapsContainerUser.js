@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import MapsUser from "./MapsUser";
+import {fetchRoute} from '../functions';
 import SocketIOClient from "socket.io-client";
+import Config from "react-native-config";
 
 export default class MapsContainerUser extends Component {
     constructor(props) {
@@ -44,6 +46,14 @@ export default class MapsContainerUser extends Component {
         this.socket.on('customerEvent', (message) => {
             this.setState({driverCoordinates:message.coords, angle: message.angle});
         });
+        fetchRoute(this.state.currentSourceCord,[],this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
+            (result) => {
+                console.log(result.coordinates[result.coordinates.length-1]);
+                this.setState({
+                    destCord:result.coordinates[result.coordinates.length-1]
+                })
+            }
+        )
     }
     static navigationOptions = ({}) => {
         return {
