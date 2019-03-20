@@ -24,7 +24,6 @@ function decode(t, e) {
         do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32);
         o = 1 & i ? ~(i >> 1) : i >> 1, l += n, r += o, d.push([l / c, r / c]);
     }
-
     return d = d.map(function(t) {
         return {
             latitude: t[0],
@@ -32,22 +31,21 @@ function decode(t, e) {
         };
     });
 }
-export function fetchRoute( origin, waypoints, destination, apikey) {
+export function fetchRoute( origin,destination, apikey) {
 
     // Define the URL to call. Only add default parameters to the URL if it's a string.
     const directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json';
     const mode = 'DRIVING';
 	const language = 'en';
     let url = directionsServiceBaseUrl;
-    if (!waypoints || !waypoints.length) {
-        waypoints = '';
-    }else {
-        waypoints = waypoints
-            .map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
-            .join('|');
+    if (origin.latitude && origin.longitude) {
+        origin = `${origin.latitude},${origin.longitude}`;
+    }
+    if (destination.latitude && destination.longitude) {
+        destination = `${destination.latitude},${destination.longitude}`;
     }
     if (typeof (directionsServiceBaseUrl) === 'string') {
-        url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
+        url += `?origin=${origin}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
     }
 
     return fetch(url)
@@ -62,7 +60,6 @@ export function fetchRoute( origin, waypoints, destination, apikey) {
             if (json.routes.length) {
 
                 const route = json.routes[0];
-
                 return Promise.resolve({
                     distance: route.legs.reduce((carry, curr) => {
                         return carry + curr.distance.value;

@@ -43,17 +43,16 @@ export default class MapsContainerUser extends Component {
     }
 
     componentDidMount() {
-        this.socket.on('customerEvent', (message) => {
-            this.setState({driverCoordinates:message.coords, angle: message.angle});
-        });
-        fetchRoute(this.state.currentSourceCord,[],this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
+        fetchRoute(this.state.currentSourceCord,this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
             (result) => {
-                console.log(result.coordinates[result.coordinates.length-1]);
                 this.setState({
                     destCord:result.coordinates[result.coordinates.length-1]
                 })
             }
         )
+        this.socket.on('customerEvent', (message) => {
+            this.setState({driverCoordinates:message.coords, angle: message.angle});
+        });
     }
     static navigationOptions = ({}) => {
         return {

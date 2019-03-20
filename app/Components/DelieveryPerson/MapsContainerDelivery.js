@@ -60,7 +60,7 @@ export default class MapsContainerDelivery extends Component {
         } catch (err) {
             console.warn(err);
         }
-        fetchRoute(this.state.currentSourceCord,[],this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
+        fetchRoute(this.state.currentSourceCord,this.state.destCord,Config.GOOGLE_MAPS_API_KEY).then(
             (result) => {
                 this.setState({
                     destCord:result.coordinates[result.coordinates.length-1]
